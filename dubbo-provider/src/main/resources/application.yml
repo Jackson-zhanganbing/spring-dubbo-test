@@ -1,0 +1,16 @@
+dubbo:
+  application:
+    name: dubbo-provider
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  protocol:
+    name: dubbo
+    serialization: hessian2
+    port: 20880
+  provider:
+    timeout: 1000
+server:
+  port: 9092
+spring:
+  application:
+    name: dubbo-provider

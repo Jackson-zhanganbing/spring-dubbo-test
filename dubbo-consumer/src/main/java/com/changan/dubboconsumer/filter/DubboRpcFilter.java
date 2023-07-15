@@ -18,13 +18,18 @@ import org.slf4j.LoggerFactory;
 
 @Activate(group = {CommonConstants.CONSUMER, CommonConstants.PROVIDER})
 public class DubboRpcFilter implements Filter {
-    private static final Logger logger = LoggerFactory.getLogger(DubboRpcFilter.class);
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        // 从上下文中获取Trace ID和用户信息
-        UserDTO userDto = new UserDTO("zhangsan",11);
-        RpcContext.getContext().setAttachment("user", JSONUtil.toJsonStr(userDto));
+        RpcContext context = RpcContext.getContext();
+        if (context.isConsumerSide()) {
+            UserDTO userDto = new UserDTO("zhangsan",11);
+            RpcContext.getContext().setAttachment("user", JSONUtil.toJsonStr(userDto));
+        }else{
+            String user = RpcContext.getContext().getAttachment("user");
+            log.info("user:====>{}", user);
+        }
         return invoker.invoke(invocation);
     }
 }

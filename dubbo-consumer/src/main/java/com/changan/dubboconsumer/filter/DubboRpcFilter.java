@@ -15,16 +15,16 @@ import org.slf4j.LoggerFactory;
  * @author zab
  * @date 2023/7/15 12:46
  */
-@Activate(group = {CommonConstants.CONSUMER})
+
+@Activate(group = {CommonConstants.CONSUMER, CommonConstants.PROVIDER})
 public class DubboRpcFilter implements Filter {
-    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(DubboRpcFilter.class);
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
-        RpcContext context = RpcContext.getServerAttachment();
-        UserDTO user = new UserDTO("zhangsan", 9);
-        context.setAttachment("user", JSONUtil.toJsonStr(user));
-
+        // 从上下文中获取Trace ID和用户信息
+        UserDTO userDto = new UserDTO("zhangsan",11);
+        RpcContext.getContext().setAttachment("user", JSONUtil.toJsonStr(userDto));
         return invoker.invoke(invocation);
     }
 }

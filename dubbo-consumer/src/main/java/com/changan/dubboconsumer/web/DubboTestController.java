@@ -1,7 +1,9 @@
 package com.changan.dubboconsumer.web;
 
+import com.changan.dubboconsumer.service.DubboTestService;
 import com.changan.service.DubboProviderService;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 /**
@@ -14,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class DubboTestController {
 
-    @DubboReference
-    private DubboProviderService dubboProviderService;
+    @Autowired
+    private DubboTestService dubboTestService;
 
     @RequestMapping("/hello")
     public String sayHelloToDubbo(){
-        return dubboProviderService.sayHello();
+        return dubboTestService.sayHello();
     }
 }
